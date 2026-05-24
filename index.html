@@ -593,14 +593,157 @@ footer{position:relative;z-index:5;text-align:center;padding:13px;font-size:.62r
           </div>
         </div>
 
-        <!-- RESUMO EXECUTIVO -->
+        <!-- DIAGNÓSTICO DE SUPERPOPULAÇÃO -->
+        <div style="font-family:'Syne',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px">🔬 Diagnóstico — Superpopulação e Desbaste<span style="flex:1;height:1px;background:var(--border)"></span></div>
+
+        <!-- Explicação técnica -->
+        <div style="background:rgba(127,119,221,.07);border:1px solid rgba(127,119,221,.25);border-radius:14px;padding:16px;margin-bottom:14px">
+          <div style="font-family:'Syne',sans-serif;font-size:.72rem;font-weight:800;color:#a78bfa;margin-bottom:8px">O que é o problema de superpopulação?</div>
+          <div style="font-size:.73rem;color:var(--muted);line-height:1.7">
+            Quando um viveiro é povoado com bônus de pós-larva (acima do planejado) ou quando a sobrevivência supera 100% da estimativa, a densidade real por m² ultrapassa o limite ideal. O resultado é um paradoxo: <span style="color:#e8f4f8;font-weight:500">os camarões continuam comendo — às vezes até acima de 100% da biomassa projetada — mas o crescimento estagna.</span>
+            <br><br>
+            Isso acontece porque em alta densidade, os animais competem por espaço, oxigênio dissolvido e alimento natural. A ração é consumida para manutenção metabólica em vez de crescimento, fazendo o FCA disparar. <span style="color:#a78bfa;font-weight:500">Estudos da UFC com 136 ciclos comerciais de L. vannamei confirmam que viveiros acima de 60 cam/m² têm taxa de crescimento significativamente inferior.</span> O desbaste estratégico reduz a densidade, libera crescimento dos animais remanescentes e antecipa receita.
+          </div>
+        </div>
+
+        <!-- Como identificar no sistema -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px">
+          <div style="font-family:'Syne',sans-serif;font-size:.68rem;font-weight:700;color:var(--text);margin-bottom:10px">🎯 Como a IA identifica superpopulação no seu painel</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px">
+            <div style="background:rgba(255,79,79,.06);border:1px solid rgba(255,79,79,.2);border-radius:8px;padding:10px">
+              <div style="font-size:.62rem;font-weight:700;color:var(--danger);margin-bottom:4px">🚨 SINAL 1 — Ração vs Crescimento</div>
+              <div style="font-size:.67rem;color:var(--muted);line-height:1.5">Viveiro recebe ração para 100% da biomassa de 100% sobrevivência, mas o CCMT está abaixo de 1,0g/sem. A ração some, o peso não sobe.</div>
+            </div>
+            <div style="background:rgba(255,79,79,.06);border:1px solid rgba(255,79,79,.2);border-radius:8px;padding:10px">
+              <div style="font-size:.62rem;font-weight:700;color:var(--danger);margin-bottom:4px">🚨 SINAL 2 — FCA acima de 2,0</div>
+              <div style="font-size:.67rem;color:var(--muted);line-height:1.5">FCA &gt; 2,0 sem doença aparente é o indicador mais claro. Cada 2kg de ração gera menos de 1kg de camarão — conversão ineficiente por densidade excessiva.</div>
+            </div>
+            <div style="background:rgba(255,179,0,.06);border:1px solid rgba(255,179,0,.2);border-radius:8px;padding:10px">
+              <div style="font-size:.62rem;font-weight:700;color:var(--warn);margin-bottom:4px">⚠ SINAL 3 — Biomassa Real &lt; 70% da 100%</div>
+              <div style="font-size:.67rem;color:var(--muted);line-height:1.5">Diferença muito grande entre biomassa real (pelo FCA) e biomassa de 100% sobrevivência indica ou mortalidade não registrada ou crescimento severamente comprimido.</div>
+            </div>
+            <div style="background:rgba(255,179,0,.06);border:1px solid rgba(255,179,0,.2);border-radius:8px;padding:10px">
+              <div style="font-size:.62rem;font-weight:700;color:var(--warn);margin-bottom:4px">⚠ SINAL 4 — Densid. &gt; 8 cam/m² em engorda</div>
+              <div style="font-size:.67rem;color:var(--muted);line-height:1.5">Para sistema semi-intensivo sem aeração intensiva, acima de 8 cam/m² o crescimento começa a ser limitado por competição de espaço e oxigênio dissolvido.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Viveiros com diagnóstico desta semana -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px">
+          <div style="padding:12px 14px;border-bottom:1px solid var(--border);font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;color:var(--text)">Diagnóstico desta semana — viveiros com sinais de superpopulação</div>
+
+          <!-- V11 - caso crítico -->
+          <div style="padding:14px;border-bottom:1px solid rgba(26,48,80,.5);background:rgba(255,79,79,.03)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-family:'Syne',sans-serif;font-size:.85rem;font-weight:800;color:var(--danger)">Viveiro 11</span>
+                <span style="font-size:.6rem;font-weight:700;background:rgba(255,79,79,.15);color:var(--danger);border:1px solid rgba(255,79,79,.3);border-radius:5px;padding:2px 8px">ALTA SUSPEITA</span>
+              </div>
+              <span style="font-size:.6rem;color:var(--muted);font-family:'DM Mono',monospace">28 dias · 340.000 pov · 0,48ha</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin-bottom:10px">
+              <div style="background:rgba(0,0,0,.2);border-radius:6px;padding:8px;text-align:center">
+                <div style="font-size:.57rem;color:var(--muted)">Densidade real</div>
+                <div style="font-family:'DM Mono',monospace;font-size:.85rem;color:var(--danger);font-weight:600">7,1 cam/m²</div>
+                <div style="font-size:.55rem;color:var(--muted)">+ sobreviv. 68%</div>
+              </div>
+              <div style="background:rgba(0,0,0,.2);border-radius:6px;padding:8px;text-align:center">
+                <div style="font-size:.57rem;color:var(--muted)">FCA atual</div>
+                <div style="font-family:'DM Mono',monospace;font-size:.85rem;color:var(--danger);font-weight:600">1,92</div>
+                <div style="font-size:.55rem;color:var(--muted)">ideal: &lt; 1,65</div>
+              </div>
+              <div style="background:rgba(0,0,0,.2);border-radius:6px;padding:8px;text-align:center">
+                <div style="font-size:.57rem;color:var(--muted)">CCMT</div>
+                <div style="font-family:'DM Mono',monospace;font-size:.85rem;color:var(--danger);font-weight:600">+1,1g/sem</div>
+                <div style="font-size:.55rem;color:var(--muted)">média: +1,78</div>
+              </div>
+              <div style="background:rgba(0,0,0,.2);border-radius:6px;padding:8px;text-align:center">
+                <div style="font-size:.57rem;color:var(--muted)">Bio real vs 100%</div>
+                <div style="font-family:'DM Mono',monospace;font-size:.85rem;color:var(--warn);font-weight:600">68%</div>
+                <div style="font-size:.55rem;color:var(--muted)">1.480 vs 2.176 kg</div>
+              </div>
+            </div>
+            <div style="background:rgba(255,79,79,.06);border-left:3px solid var(--danger);border-radius:0 8px 8px 0;padding:10px 12px">
+              <div style="font-size:.65rem;font-weight:700;color:var(--danger);margin-bottom:4px">Diagnóstico da IA</div>
+              <div style="font-size:.68rem;color:var(--muted);line-height:1.6">V11 apresenta a combinação mais preocupante da fazenda: FCA 1,92 com CCMT de apenas +1,1g/sem em 28 dias. Os animais estão consumindo ração normalmente — mas não crescem. Isso sugere competição por espaço ou oxigênio. Com 340.000 animais em 0,48ha (7,1 cam/m² vivos estimados), a densidade pode estar comprimindo o crescimento. <span style="color:#e8f4f8;font-weight:500">Recomendação: desbaste de 25-30% do estoque (~85.000 a 100.000 animais) ao atingir 8g. Isso deve reduzir o FCA para ~1,65 e aumentar o CCMT em 40-60% nos animais remanescentes.</span></div>
+            </div>
+          </div>
+
+          <!-- V04 - caso moderado -->
+          <div style="padding:14px;background:rgba(255,179,0,.02)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-family:'Syne',sans-serif;font-size:.85rem;font-weight:800;color:var(--warn)">Viveiro 04</span>
+                <span style="font-size:.6rem;font-weight:700;background:rgba(255,179,0,.12);color:var(--warn);border:1px solid rgba(255,179,0,.3);border-radius:5px;padding:2px 8px">MONITORAR</span>
+              </div>
+              <span style="font-size:.6rem;color:var(--muted);font-family:'DM Mono',monospace">38 dias · 450.000 pov · 0,65ha</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin-bottom:10px">
+              <div style="background:rgba(0,0,0,.2);border-radius:6px;padding:8px;text-align:center">
+                <div style="font-size:.57rem;color:var(--muted)">Densidade inicial</div>
+                <div style="font-family:'DM Mono',monospace;font-size:.85rem;color:var(--warn);font-weight:600">6,9 cam/m²</div>
+                <div style="font-size:.55rem;color:var(--muted)">450k em 6.500m²</div>
+              </div>
+              <div style="background:rgba(0,0,0,.2);border-radius:6px;padding:8px;text-align:center">
+                <div style="font-size:.57rem;color:var(--muted)">FCA atual</div>
+                <div style="font-family:'DM Mono',monospace;font-size:.85rem;color:var(--warn);font-weight:600">1,84</div>
+                <div style="font-size:.55rem;color:var(--muted)">acima do ideal</div>
+              </div>
+              <div style="background:rgba(0,0,0,.2);border-radius:6px;padding:8px;text-align:center">
+                <div style="font-size:.57rem;color:var(--muted)">CCMT</div>
+                <div style="font-family:'DM Mono',monospace;font-size:.85rem;color:var(--warn);font-weight:600">+1,2g/sem</div>
+                <div style="font-size:.55rem;color:var(--muted)">média: +1,78</div>
+              </div>
+              <div style="background:rgba(0,0,0,.2);border-radius:6px;padding:8px;text-align:center">
+                <div style="font-size:.57rem;color:var(--muted)">Sobrevivência</div>
+                <div style="font-family:'DM Mono',monospace;font-size:.85rem;color:var(--danger);font-weight:600">70%</div>
+                <div style="font-size:.55rem;color:var(--muted)">abaixo do ideal</div>
+              </div>
+            </div>
+            <div style="background:rgba(255,179,0,.06);border-left:3px solid var(--warn);border-radius:0 8px 8px 0;padding:10px 12px">
+              <div style="font-size:.65rem;font-weight:700;color:var(--warn);margin-bottom:4px">Diagnóstico da IA</div>
+              <div style="font-size:.68rem;color:var(--muted);line-height:1.6">V04 foi povoado com 450.000 animais em 0,65ha — densidade de 6,9 cam/m², ainda dentro do limite técnico. Porém com apenas 38 dias já apresenta FCA 1,84 e CCMT abaixo da média. Isso pode indicar: (a) bônus de larva acima do estimado aumentando a densidade real, (b) qualidade de água comprometida ou (c) início de superpopulação. <span style="color:#e8f4f8;font-weight:500">Monitorar bandeja de alimentação nas próximas 2 semanas. Se ração sobrar por menos de 1h após cada arraçoamento, o viveiro está sub-arraçoado. Se FCA subir acima de 1,90, executar desbaste de 20% ao atingir 9-10g.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Simulação do impacto do desbaste -->
+        <div style="background:linear-gradient(135deg,rgba(0,255,163,.06),rgba(0,229,255,.04));border:1px solid rgba(0,255,163,.2);border-radius:14px;padding:16px;margin-bottom:18px">
+          <div style="font-family:'Syne',sans-serif;font-size:.68rem;font-weight:800;color:var(--accent2);margin-bottom:12px">💹 Simulação: impacto financeiro do desbaste em V11</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+            <div style="background:rgba(255,79,79,.08);border:1px solid rgba(255,79,79,.2);border-radius:10px;padding:12px">
+              <div style="font-size:.62rem;font-weight:700;color:var(--danger);margin-bottom:6px">SEM DESBASTE — projeção atual</div>
+              <div style="font-size:.67rem;color:var(--muted);line-height:1.7">
+                CCMT: +1,1g/sem<br>
+                Semanas p/ 15g: ~<span style="color:var(--danger)">7,8 semanas</span><br>
+                Custo extra ração: <span style="color:var(--danger)">+R$ 3.200</span><br>
+                FCA ao despescar: ~2,0<br>
+                Receita est.: <span style="color:var(--danger)">R$ 32.560</span>
+              </div>
+            </div>
+            <div style="background:rgba(0,255,163,.06);border:1px solid rgba(0,255,163,.2);border-radius:10px;padding:12px">
+              <div style="font-size:.62rem;font-weight:700;color:var(--accent2);margin-bottom:6px">COM DESBASTE DE 30% — projeção</div>
+              <div style="font-size:.67rem;color:var(--muted);line-height:1.7">
+                CCMT pós-desbaste: ~+1,7g/sem<br>
+                Semanas p/ 15g: ~<span style="color:var(--accent2)">5,3 semanas</span><br>
+                Receita desbaste: <span style="color:var(--accent2)">+R$ 4.800</span><br>
+                FCA remanescente: ~1,65<br>
+                Receita total est.: <span style="color:var(--accent2)">R$ 41.200</span>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:.7rem;color:var(--muted);background:rgba(0,0,0,.2);border-radius:8px;padding:10px;line-height:1.6">
+            🧮 <span style="color:var(--accent2);font-weight:600">Ganho estimado com desbaste estratégico: ~R$ 8.640</span> — combinando receita antecipada do desbaste (R$ 4.800) + redução de custo de ração (R$ 1.280) + melhora de receita final pelo maior peso individual dos remanescentes (R$ 2.560). Baseado em estudos da UFC/CE com ciclos comerciais de L. vannamei.
+          </div>
+        </div>
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px">
           <div style="font-family:'Syne',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">📋 Resumo Executivo — Ações desta semana</div>
           <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(26,48,80,.3)"><span style="font-size:.58rem;font-weight:700;color:var(--danger);background:rgba(255,79,79,.1);border-radius:4px;padding:2px 7px;white-space:nowrap;flex-shrink:0;margin-top:1px">URGENTE</span><div style="font-size:.72rem;color:var(--muted);line-height:1.45">Repor Diflubenzuron e Zeólita — estoque zerado/crítico</div></div>
           <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(26,48,80,.3)"><span style="font-size:.58rem;font-weight:700;color:var(--danger);background:rgba(255,79,79,.1);border-radius:4px;padding:2px 7px;white-space:nowrap;flex-shrink:0;margin-top:1px">URGENTE</span><div style="font-size:.72rem;color:var(--muted);line-height:1.45">Iniciar despesca do Viveiro 12 (17,9g, 115 dias, lucro est. R$ 107.988)</div></div>
           <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(26,48,80,.3)"><span style="font-size:.58rem;font-weight:700;color:var(--warn);background:rgba(255,179,0,.08);border-radius:4px;padding:2px 7px;white-space:nowrap;flex-shrink:0;margin-top:1px">ESTA SEMANA</span><div style="font-size:.72rem;color:var(--muted);line-height:1.45">Avaliar despesca do Viveiro 05 ao atingir 18g (~7 dias)</div></div>
-          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(26,48,80,.3)"><span style="font-size:.58rem;font-weight:700;color:var(--warn);background:rgba(255,179,0,.08);border-radius:4px;padding:2px 7px;white-space:nowrap;flex-shrink:0;margin-top:1px">ESTA SEMANA</span><div style="font-size:.72rem;color:var(--muted);line-height:1.45">Investigar FCA 1,92 do Viveiro 11 — possível mortalidade não registrada</div></div>
-          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(26,48,80,.3)"><span style="font-size:.58rem;font-weight:700;color:var(--warn);background:rgba(255,179,0,.08);border-radius:4px;padding:2px 7px;white-space:nowrap;flex-shrink:0;margin-top:1px">ESTA SEMANA</span><div style="font-size:.72rem;color:var(--muted);line-height:1.45">Monitorar sobrevivência do Viveiro 04 (70% com 38 dias)</div></div>
+          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(26,48,80,.3)"><span style="font-size:.58rem;font-weight:700;color:var(--danger);background:rgba(255,79,79,.1);border-radius:4px;padding:2px 7px;white-space:nowrap;flex-shrink:0;margin-top:1px">ESTA SEMANA</span><div style="font-size:.72rem;color:var(--muted);line-height:1.45">Viveiro 11 — FCA 1,92 com CCMT travado: alta suspeita de superpopulação. Planejar desbaste de 25-30% ao atingir 8g. Ganho estimado: <span style="color:var(--accent2)">R$ 8.640</span></div></div>
+          <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(26,48,80,.3)"><span style="font-size:.58rem;font-weight:700;color:var(--warn);background:rgba(255,179,0,.08);border-radius:4px;padding:2px 7px;white-space:nowrap;flex-shrink:0;margin-top:1px">ESTA SEMANA</span><div style="font-size:.72rem;color:var(--muted);line-height:1.45">Viveiro 04 — monitorar bandeja. Se FCA subir acima de 1,90, preparar desbaste de 20% ao atingir 9-10g</div></div>
           <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(26,48,80,.3)"><span style="font-size:.58rem;font-weight:700;color:var(--accent);background:rgba(0,229,255,.06);border-radius:4px;padding:2px 7px;white-space:nowrap;flex-shrink:0;margin-top:1px">PRÓXIMO CICLO</span><div style="font-size:.72rem;color:var(--muted);line-height:1.45">Considerar substituição de Potimar Iniciante por Guabi 38% ou Aquatec</div></div>
           <div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0"><span style="font-size:.58rem;font-weight:700;color:var(--accent);background:rgba(0,229,255,.06);border-radius:4px;padding:2px 7px;white-space:nowrap;flex-shrink:0;margin-top:1px">PRÓXIMO CICLO</span><div style="font-size:.72rem;color:var(--muted);line-height:1.45">Planejar despesca do Viveiro 10 em ~14 dias (15,6g, receita est. R$ 122.496)</div></div>
         </div>
