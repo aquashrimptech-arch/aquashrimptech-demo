@@ -183,6 +183,7 @@ footer{position:relative;z-index:5;text-align:center;padding:13px;font-size:.62r
   <button class="tab-btn" onclick="switchTab('biometria',this)">⚖️ Biometria</button>
   <button class="tab-btn" onclick="switchTab('historico',this)">📈 Histórico</button>
   <button class="tab-btn" onclick="switchTab('estoque',this)">🏭 Estoque</button>
+  <button class="tab-btn" onclick="switchTab('relatorio',this)">🤖 Relatório IA</button>
 </nav>
 <main>
   <div id="tab-painel" class="tab-panel active">
@@ -209,7 +210,300 @@ footer{position:relative;z-index:5;text-align:center;padding:13px;font-size:.62r
     </div>
     <div id="hist-container"></div>
   </div>
-  <div id="tab-estoque" class="tab-panel">
+  <div id="tab-relatorio" class="tab-panel">
+    <div style="max-width:680px;margin:0 auto">
+
+      <!-- Card de nova análise disponível -->
+      <div id="card-nova-analise" style="background:linear-gradient(135deg,rgba(0,229,255,.12),rgba(0,255,163,.08));border:1px solid rgba(0,229,255,.3);border-radius:20px;padding:20px 22px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;cursor:pointer" onclick="abrirAnalise()">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="position:relative;flex-shrink:0">
+            <div style="width:50px;height:50px;border-radius:14px;background:rgba(0,229,255,.15);border:1px solid rgba(0,229,255,.25);display:flex;align-items:center;justify-content:center;font-size:1.5rem">🤖</div>
+            <div style="position:absolute;top:-5px;right:-5px;width:18px;height:18px;background:var(--danger);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:800;color:#fff;font-family:'Syne',sans-serif;animation:pulse-live 1.6s ease-in-out infinite">1</div>
+          </div>
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;color:var(--accent)">Nova análise disponível</div>
+            <div style="font-size:.7rem;color:var(--muted);margin-top:2px">Semana 21/2026 · gerada em 24/05/2026 às 07:00 · 12 viveiros analisados</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:.68rem;font-weight:700;color:var(--accent2);background:rgba(0,255,163,.1);border:1px solid rgba(0,255,163,.25);border-radius:6px;padding:4px 10px;letter-spacing:.06em">VER ANÁLISE</span>
+          <span style="color:var(--muted);font-size:1.1rem">›</span>
+        </div>
+      </div>
+
+      <!-- Card de envio Telegram -->
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+          <span style="font-size:1.3rem">📱</span>
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-size:.88rem;font-weight:800;color:var(--text)">Envio automático semanal</div>
+            <div style="font-size:.68rem;color:var(--muted);margin-top:2px">Todo domingo às 07:00 · o relatório é disparado automaticamente para cada cliente</div>
+          </div>
+        </div>
+
+        <div style="background:rgba(0,255,163,.04);border:1px solid rgba(0,255,163,.15);border-radius:12px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
+          <div style="font-size:1.2rem">📲</div>
+          <div>
+            <div style="font-size:.62rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px">Destinatário desta conta</div>
+            <div style="font-family:'DM Mono',monospace;font-size:.82rem;color:var(--accent2);font-weight:500">Telegram ID: 8202730219</div>
+            <div style="font-size:.6rem;color:var(--muted);margin-top:1px">via bot AquaShrimpTech · próximo envio: domingo 25/05 às 07:00</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+          ${['FCA e eficiência de ração','CCMT e tendência de crescimento','Sobrevivência e anomalias','Análise financeira por viveiro','Ranking de lucro e ROI','Custo por kg produzido','Projeção de despesca','Estoque crítico e cobertura','Benchmark de laboratórios','Insight estratégico semanal'].map(i=>`<div style="display:flex;align-items:center;gap:5px;font-size:.67rem;color:var(--muted)"><span style="color:var(--accent2);font-size:.7rem">✓</span>${i}</div>`).join('')}
+        </div>
+
+        <button id="btn-gerar-relatorio" onclick="simularEnvioTelegram()" style="width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),#0090a8);border:none;border-radius:12px;color:#080f1a;font-family:'Syne',sans-serif;font-size:.88rem;font-weight:800;letter-spacing:.06em;cursor:pointer;text-transform:uppercase">
+          📤 Simular Envio no Telegram
+        </button>
+        <div id="relatorio-status" style="margin-top:12px;display:none"></div>
+      </div>
+
+    </div>
+
+    <!-- MODAL DA ANÁLISE COMPLETA -->
+    <div id="modal-analise" style="display:none;position:fixed;inset:0;background:rgba(4,8,15,.92);z-index:3000;overflow-y:auto;padding:20px">
+      <div style="max-width:780px;margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px">
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:10px">
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--accent)">🤖 Relatório Semanal de Inteligência</div>
+            <div style="font-size:.68rem;color:var(--muted);margin-top:3px">Fazenda Modelo Nordeste · Semana 21/2026 · 24/05/2026 07:00 · 12 viveiros</div>
+          </div>
+          <button onclick="fecharAnalise()" style="background:rgba(255,79,79,.1);border:1px solid rgba(255,79,79,.3);border-radius:8px;padding:7px 14px;color:var(--danger);font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;cursor:pointer;letter-spacing:.06em">✕ FECHAR</button>
+        </div>
+
+        <!-- NOTA GERAL -->
+        <div style="background:linear-gradient(135deg,rgba(0,229,255,.1),rgba(0,255,163,.06));border:1px solid rgba(0,229,255,.25);border-radius:16px;padding:20px;margin-bottom:18px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+          <div style="text-align:center;flex-shrink:0">
+            <div style="font-family:'Syne',sans-serif;font-size:3.5rem;font-weight:800;color:var(--accent);line-height:1">7,8</div>
+            <div style="font-size:.62rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">nota geral</div>
+          </div>
+          <div style="flex:1;min-width:200px">
+            <div style="font-family:'Syne',sans-serif;font-size:.9rem;font-weight:800;color:var(--text);margin-bottom:6px">Fazenda acima da média da plataforma</div>
+            <div style="font-size:.76rem;color:var(--muted);line-height:1.6">12 viveiros ativos com biomassa real total de <span style="color:var(--accent)">45.310 kg</span>. Receita estimada de despesca de <span style="color:var(--accent2)">R$ 996.820</span> com lucro projetado de <span style="color:var(--accent2)">R$ 659.320</span> — ROI médio de <span style="color:var(--accent2)">195,4%</span>. Dois viveiros prontos para despesca imediata. Atenção especial a V11 e V04.</div>
+          </div>
+        </div>
+
+        <!-- KPIs FINANCEIROS -->
+        <div style="font-family:'Syne',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px">💰 Visão Financeira Geral<span style="flex:1;height:1px;background:var(--border)"></span></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:18px">
+          ${[
+            {l:'Biomassa real total',v:'45.310 kg',c:'accent'},
+            {l:'Receita est. despesca',v:'R$ 996.820',c:'green'},
+            {l:'Custo total ciclos',v:'R$ 337.500',c:'warn'},
+            {l:'Lucro estimado total',v:'R$ 659.320',c:'green'},
+            {l:'ROI médio da fazenda',v:'195,4%',c:'green'},
+            {l:'Custo médio por kg',v:'R$ 7,45/kg',c:''},
+          ].map(k=>`<div class="kpi-card ${k.c}"><div class="kpi-label">${k.l}</div><div class="kpi-value ${k.c}" style="font-size:1.1rem">${k.v}</div></div>`).join('')}
+        </div>
+
+        <!-- RANKING DE LUCRO -->
+        <div style="font-family:'Syne',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px">🏆 Ranking — Maior Lucro Absoluto<span style="flex:1;height:1px;background:var(--border)"></span></div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:18px">
+          ${[
+            {n:'Viveiro 12',lucro:'R$ 107.988',roi:'196,7%',custo:'R$ 54.900',kg:'7.404',lab:'Guabi 45%',bar:100,destaque:true},
+            {n:'Viveiro 10',lucro:'R$ 81.696', roi:'200,2%',custo:'R$ 40.800',kg:'5.568',lab:'Aquatec 38',bar:76},
+            {n:'Viveiro 08',lucro:'R$ 67.250', roi:'223,4%',custo:'R$ 30.100',kg:'4.425',lab:'Guabi 38%',bar:62},
+            {n:'Viveiro 03',lucro:'R$ 62.940', roi:'189,6%',custo:'R$ 33.200',kg:'4.370',lab:'Guabi 38%',bar:58},
+            {n:'Viveiro 05',lucro:'R$ 55.940', roi:'125,4%',custo:'R$ 44.600',kg:'4.570',lab:'Aquatec 38',bar:52},
+            {n:'Viveiro 02',lucro:'R$ 44.912', roi:'203,2%',custo:'R$ 22.100',kg:'3.046',lab:'Guabi 45%',bar:42},
+            {n:'Viveiro 06',lucro:'R$ 49.610', roi:'196,1%',custo:'R$ 25.300',kg:'3.405',lab:'Guabi 45%',bar:46},
+            {n:'Viveiro 01',lucro:'R$ 46.070', roi:'162,2%',custo:'R$ 28.400',kg:'3.385',lab:'Guabi 38%',bar:43},
+            {n:'Viveiro 04',lucro:'R$ 39.868', roi:'311,5%',custo:'R$ 12.800',kg:'2.394',lab:'Nicoluzzi',bar:37},
+            {n:'Viveiro 09',lucro:'R$ 43.488', roi:'202,3%',custo:'R$ 21.500',kg:'2.954',lab:'Nicoluzzi',bar:40},
+            {n:'Viveiro 07',lucro:'R$ 35.198', roi:'225,6%',custo:'R$ 15.600',kg:'2.309',lab:'Potimar',bar:33},
+            {n:'Viveiro 11',lucro:'R$ 24.360', roi:'297,1%',custo:'R$ 8.200', kg:'1.480',lab:'Guabi 38%',bar:23},
+          ].map((r,i)=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid rgba(26,48,80,.4);${r.destaque?'background:rgba(0,229,255,.04)':''}">
+            <div style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);width:16px;text-align:center">${i+1}</div>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+                <span style="font-family:'Syne',sans-serif;font-size:.78rem;font-weight:800;color:${r.destaque?'var(--accent)':'var(--text)'}">${r.n}</span>
+                <span style="font-size:.58rem;background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.2);border-radius:4px;padding:1px 6px;color:var(--accent)">${r.lab}</span>
+              </div>
+              <div style="background:var(--border);border-radius:2px;height:3px"><div style="width:${r.bar}%;height:100%;background:${i===0?'var(--accent2)':i<3?'var(--accent)':'var(--muted)'};border-radius:2px"></div></div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-family:'DM Mono',monospace;font-size:.78rem;font-weight:600;color:var(--accent2)">${r.lucro}</div>
+              <div style="font-size:.6rem;color:var(--muted)">ROI ${r.roi}</div>
+            </div>
+          </div>`).join('')}
+        </div>
+
+        <!-- QUEM FAZ MAIS COM MENOS — ROI -->
+        <div style="font-family:'Syne',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px">🎯 Quem faz mais com menos — Melhor ROI<span style="flex:1;height:1px;background:var(--border)"></span></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:18px">
+          ${[
+            {n:'Viveiro 04',roi:'311,5%',custo:'R$ 12.800',lucro:'R$ 39.868',desc:'Menor investimento, maior retorno proporcional. 38 dias de ciclo com surv. 70%.'},
+            {n:'Viveiro 11',roi:'297,1%',custo:'R$ 8.200',lucro:'R$ 24.360',desc:'Ciclo mais novo (28 dias). Custo baixíssimo — mas FCA 1,92 precisa de atenção.'},
+            {n:'Viveiro 07',roi:'225,6%',custo:'R$ 15.600',lucro:'R$ 35.198',desc:'44 dias com boa eficiência de custo. CCMT de 1,4 abaixo da média da fazenda.'},
+          ].map(r=>`<div style="background:rgba(0,255,163,.05);border:1px solid rgba(0,255,163,.18);border-radius:12px;padding:14px">
+            <div style="font-family:'Syne',sans-serif;font-size:.8rem;font-weight:800;color:var(--accent2);margin-bottom:2px">${r.n}</div>
+            <div style="font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--accent2);margin-bottom:6px">ROI ${r.roi}</div>
+            <div style="font-size:.67rem;color:var(--muted);line-height:1.5;margin-bottom:8px">${r.desc}</div>
+            <div style="display:flex;justify-content:space-between;font-size:.65rem;font-family:'DM Mono',monospace">
+              <span style="color:var(--warn)">${r.custo}</span>
+              <span style="color:var(--accent2)">${r.lucro}</span>
+            </div>
+          </div>`).join('')}
+        </div>
+
+        <!-- PRODUÇÃO POR HECTARE -->
+        <div style="font-family:'Syne',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px">📐 Produtividade por Hectare<span style="flex:1;height:1px;background:var(--border)"></span></div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:18px">
+          <div style="font-size:.68rem;color:var(--muted);margin-bottom:12px">Quem produz mais por metro quadrado — independente do tamanho do viveiro</div>
+          ${[
+            {n:'Viveiro 12',kgha:'10.888',area:'0,68ha',bar:100,cor:'var(--accent2)'},
+            {n:'Viveiro 05',kgha:'10.156',area:'0,45ha',bar:93,cor:'var(--accent2)'},
+            {n:'Viveiro 10',kgha:'8.981', area:'0,62ha',bar:82,cor:'var(--accent)'},
+            {n:'Viveiro 03',kgha:'7.945', area:'0,55ha',bar:73,cor:'var(--accent)'},
+            {n:'Viveiro 08',kgha:'7.375', area:'0,60ha',bar:68,cor:'var(--accent)'},
+            {n:'Viveiro 11',kgha:'3.083', area:'0,48ha',bar:28,cor:'var(--danger)'},
+          ].map(r=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;color:var(--text);width:80px;flex-shrink:0">${r.n}</div>
+            <div style="flex:1;background:var(--border);border-radius:3px;height:6px"><div style="width:${r.bar}%;height:100%;background:${r.cor};border-radius:3px"></div></div>
+            <div style="font-family:'DM Mono',monospace;font-size:.7rem;color:${r.cor};width:75px;text-align:right">${r.kgha} kg/ha</div>
+            <div style="font-size:.6rem;color:var(--muted);width:40px;text-align:right">${r.area}</div>
+          </div>`).join('')}
+        </div>
+
+        <!-- PRONTOS PARA DESPESCA -->
+        <div style="font-family:'Syne',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px">🎣 Prontos para Despesca — Agir Agora<span style="flex:1;height:1px;background:var(--border)"></span></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-bottom:18px">
+          <div style="background:rgba(0,229,255,.06);border:2px solid rgba(0,229,255,.3);border-radius:14px;padding:16px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+              <div style="font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;color:var(--accent)">Viveiro 12</div>
+              <span style="font-size:.6rem;font-weight:700;background:rgba(0,255,163,.15);color:var(--accent2);border-radius:6px;padding:3px 8px;border:1px solid rgba(0,255,163,.3)">DESCER AGORA</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.7rem">
+              <div><div style="color:var(--muted)">Peso atual</div><div style="font-family:'DM Mono',monospace;color:var(--accent);font-weight:600">17,9g</div></div>
+              <div><div style="color:var(--muted)">Dias de ciclo</div><div style="font-family:'DM Mono',monospace;color:var(--text)">115 dias</div></div>
+              <div><div style="color:var(--muted)">Biomassa real</div><div style="font-family:'DM Mono',monospace;color:var(--text)">7.404 kg</div></div>
+              <div><div style="color:var(--muted)">Custo do ciclo</div><div style="font-family:'DM Mono',monospace;color:var(--warn)">R$ 54.900</div></div>
+              <div><div style="color:var(--muted)">Receita est.</div><div style="font-family:'DM Mono',monospace;color:var(--accent2);font-weight:700">R$ 162.888</div></div>
+              <div><div style="color:var(--muted)">Lucro est.</div><div style="font-family:'DM Mono',monospace;color:var(--accent2);font-weight:700">R$ 107.988</div></div>
+            </div>
+            <div style="margin-top:10px;font-size:.67rem;color:var(--muted);background:rgba(0,0,0,.2);border-radius:8px;padding:8px">💡 Maior produtor da fazenda: 10.888 kg/ha e melhor CCMT (+2,5g/sem). Cada semana extra de ciclo adiciona custo fixo sem ganho proporcional de peso. Momento ideal.</div>
+          </div>
+          <div style="background:rgba(0,255,163,.05);border:2px solid rgba(0,255,163,.25);border-radius:14px;padding:16px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+              <div style="font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;color:var(--accent2)">Viveiro 05</div>
+              <span style="font-size:.6rem;font-weight:700;background:rgba(0,255,163,.15);color:var(--accent2);border-radius:6px;padding:3px 8px;border:1px solid rgba(0,255,163,.3)">JANELA ABERTA</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.7rem">
+              <div><div style="color:var(--muted)">Peso atual</div><div style="font-family:'DM Mono',monospace;color:var(--accent2);font-weight:600">16,8g</div></div>
+              <div><div style="color:var(--muted)">Dias de ciclo</div><div style="font-family:'DM Mono',monospace;color:var(--text)">102 dias</div></div>
+              <div><div style="color:var(--muted)">Biomassa real</div><div style="font-family:'DM Mono',monospace;color:var(--text)">4.570 kg</div></div>
+              <div><div style="color:var(--muted)">Custo do ciclo</div><div style="font-family:'DM Mono',monospace;color:var(--warn)">R$ 44.600</div></div>
+              <div><div style="color:var(--muted)">Receita est.</div><div style="font-family:'DM Mono',monospace;color:var(--accent2);font-weight:700">R$ 100.540</div></div>
+              <div><div style="color:var(--muted)">Lucro est.</div><div style="font-family:'DM Mono',monospace;color:var(--accent2);font-weight:700">R$ 55.940</div></div>
+            </div>
+            <div style="margin-top:10px;font-size:.67rem;color:var(--muted);background:rgba(0,0,0,.2);border-radius:8px;padding:8px">💡 Melhor FCA da fazenda (1,55) — o mais eficiente em conversão de ração. Aguardar até 18g pode render mais R$ 4.500 em receita com custo marginal baixo.</div>
+          </div>
+        </div>
+
+        <!-- PRÓXIMOS 30 DIAS -->
+        <div style="font-family:'Syne',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px">📅 Previsão de Despesca — Próximos 30 dias<span style="flex:1;height:1px;background:var(--border)"></span></div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:18px">
+          ${[
+            {n:'Viveiro 12',peso:'17,9g',dias:'Agora',receita:'R$ 162.888',cor:'var(--accent2)'},
+            {n:'Viveiro 05',peso:'16,8g',dias:'~7 dias',receita:'R$ 100.540',cor:'var(--accent2)'},
+            {n:'Viveiro 10',peso:'15,6g',dias:'~14 dias',receita:'R$ 122.496',cor:'var(--accent)'},
+            {n:'Viveiro 03',peso:'14,2g',dias:'~26 dias',receita:'R$ 96.140',cor:'var(--accent)'},
+            {n:'Viveiro 08',peso:'13,5g',dias:'~32 dias',receita:'R$ 97.350',cor:'var(--muted)'},
+          ].map(r=>`<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid rgba(26,48,80,.4)">
+            <div style="font-family:'Syne',sans-serif;font-size:.75rem;font-weight:700;color:var(--text);width:85px;flex-shrink:0">${r.n}</div>
+            <div style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--accent);width:48px">${r.peso}</div>
+            <div style="font-size:.68rem;color:var(--muted);flex:1">${r.dias}</div>
+            <div style="font-family:'DM Mono',monospace;font-size:.75rem;font-weight:600;color:${r.cor}">${r.receita}</div>
+          </div>`).join('')}
+        </div>
+
+        <!-- PONTOS DE ATENÇÃO -->
+        <div style="font-family:'Syne',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px">⚠️ Pontos de Atenção<span style="flex:1;height:1px;background:var(--border)"></span></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-bottom:18px">
+          <div style="background:rgba(255,179,0,.06);border:1px solid rgba(255,179,0,.25);border-radius:12px;padding:14px">
+            <div style="font-family:'Syne',sans-serif;font-size:.82rem;font-weight:800;color:var(--warn);margin-bottom:8px">⚠ Viveiro 11 — FCA crítico</div>
+            <div style="font-size:.7rem;color:var(--muted);line-height:1.6">FCA de <span style="color:var(--warn)">1,92</span> com peso de 6,4g após 28 dias. CCMT de apenas +1,1g/sem — 38% abaixo da média da fazenda (+1,78g/sem). Sobrevivência de 68% é a mais baixa. Verifique se há mortalidade não registrada e revise a tabela de arraçoamento. Se o padrão continuar, este viveiro terá o pior custo/kg da fazenda ao despescar.</div>
+          </div>
+          <div style="background:rgba(255,179,0,.06);border:1px solid rgba(255,179,0,.25);border-radius:12px;padding:14px">
+            <div style="font-family:'Syne',sans-serif;font-size:.82rem;font-weight:800;color:var(--warn);margin-bottom:8px">⚠ Viveiro 04 — Sobrevivência baixa</div>
+            <div style="font-size:.7rem;color:var(--muted);line-height:1.6">70% de sobrevivência com apenas 38 dias de ciclo. Para um viveiro com 450.000 larvas, isso significa ~135.000 animais perdidos. FCA de 1,84 indica arraçoamento acima da capacidade de consumo real. Monitore mortalidade nas próximas 72h e ajuste a bandeja. Apesar disso, o ROI estimado ainda é de <span style="color:var(--accent2)">311,5%</span> pelo baixo custo de ciclo.</div>
+          </div>
+        </div>
+
+        <!-- ANÁLISE DE LABORATÓRIOS -->
+        <div style="font-family:'Syne',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px">🧪 Análise por Laboratório/Ração<span style="flex:1;height:1px;background:var(--border)"></span></div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:18px">
+          ${[
+            {lab:'Guabi Acqua 45%',viveiros:'V02, V06, V12',ccmt:'2,10',fca:'1,64',surv:'79,3%',custo:'R$ 5,10/kg',nota:'Maior CCMT médio da fazenda. V12 é o melhor viveiro geral.',cor:'var(--accent2)'},
+            {lab:'Aquatec 38',viveiros:'V05, V10',ccmt:'2,30',fca:'1,56',surv:'84,0%',custo:'R$ 4,88/kg',nota:'Melhor FCA médio. Menor custo por kg produzido.',cor:'var(--accent)'},
+            {lab:'Guabi Acqua 38%',viveiros:'V01, V03, V08, V11',ccmt:'1,73',fca:'1,68',surv:'76,8%',custo:'R$ 4,60/kg',nota:'Mais barata da fazenda. Boa performance geral exceto V11.',cor:'var(--accent)'},
+            {lab:'Nicoluzzi Premium',viveiros:'V04, V09',ccmt:'1,40',fca:'1,78',surv:'72,5%',custo:'R$ 5,80/kg',nota:'Mais cara com menor CCMT. Avaliar troca após ciclo atual.',cor:'var(--warn)'},
+            {lab:'Potimar Iniciante',viveiros:'V07',ccmt:'1,40',fca:'1,79',surv:'72,0%',custo:'R$ 6,20/kg',nota:'Pior custo-benefício. Maior preço, menor crescimento.',cor:'var(--danger)'},
+          ].map(r=>`<div style="padding:10px 0;border-bottom:1px solid rgba(26,48,80,.4)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;flex-wrap:wrap;gap:4px">
+              <div style="font-family:'Syne',sans-serif;font-size:.78rem;font-weight:800;color:${r.cor}">${r.lab}</div>
+              <div style="font-size:.6rem;color:var(--muted)">${r.viveiros}</div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:5px">
+              ${[['CCMT médio',r.ccmt+'g/sem'],['FCA médio',r.fca],['Sobrev. média',r.surv],['Custo ração',r.custo]].map(([l,v])=>`<div><div style="font-size:.57rem;color:var(--muted)">${l}</div><div style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--text)">${v}</div></div>`).join('')}
+            </div>
+            <div style="font-size:.65rem;color:var(--muted);font-style:italic">${r.nota}</div>
+          </div>`).join('')}
+        </div>
+
+        <!-- ESTOQUE CRÍTICO -->
+        <div style="font-family:'Syne',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px">🔴 Alertas de Estoque<span style="flex:1;height:1px;background:var(--border)"></span></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:18px">
+          ${[
+            {prod:'Diflubenzuron',qtd:'0g',sit:'ZERADO',cobertura:'0 dias',acao:'Solicitar urgente — prazo de entrega longo',cor:'var(--danger)',bg:'rgba(255,79,79,.08)',brd:'rgba(255,79,79,.3)'},
+            {prod:'Zeólita',qtd:'40 kg',sit:'CRÍTICO',cobertura:'~4 dias',acao:'Reposição imediata para 12 viveiros ativos',cor:'var(--danger)',bg:'rgba(255,79,79,.08)',brd:'rgba(255,79,79,.3)'},
+            {prod:'Nicoluzzi Premium',qtd:'650 kg',sit:'CRÍTICO',cobertura:'~8 dias',acao:'V04 e V09 dependem desta ração exclusivamente',cor:'var(--warn)',bg:'rgba(255,179,0,.06)',brd:'rgba(255,179,0,.25)'},
+            {prod:'Cal Virgem',qtd:'480 kg',sit:'BAIXO',cobertura:'~12 dias',acao:'Agendar compra na próxima semana',cor:'var(--warn)',bg:'rgba(255,179,0,.06)',brd:'rgba(255,179,0,.25)'},
+            {prod:'Ácido Ascórbico',qtd:'8 kg',sit:'BAIXO',cobertura:'~10 dias',acao:'Repor junto com próxima compra de insumos',cor:'var(--warn)',bg:'rgba(255,179,0,.06)',brd:'rgba(255,179,0,.25)'},
+          ].map(r=>`<div style="background:${r.bg};border:1px solid ${r.brd};border-radius:10px;padding:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+              <div style="font-family:'Syne',sans-serif;font-size:.75rem;font-weight:800;color:${r.cor}">${r.prod}</div>
+              <span style="font-size:.58rem;font-weight:700;color:${r.cor};border:1px solid ${r.brd};border-radius:4px;padding:1px 6px">${r.sit}</span>
+            </div>
+            <div style="font-family:'DM Mono',monospace;font-size:.8rem;color:var(--text);margin-bottom:3px">${r.qtd} · ${r.cobertura}</div>
+            <div style="font-size:.63rem;color:var(--muted)">${r.acao}</div>
+          </div>`).join('')}
+        </div>
+
+        <!-- INSIGHT ESTRATÉGICO -->
+        <div style="background:linear-gradient(135deg,rgba(0,229,255,.08),rgba(127,119,221,.06));border:1px solid rgba(0,229,255,.22);border-radius:16px;padding:18px;margin-bottom:18px">
+          <div style="font-family:'Syne',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">💡 Insight Estratégico da Semana</div>
+          <div style="font-size:.78rem;color:var(--muted);line-height:1.7">
+            <p style="margin-bottom:8px">A fazenda está operando com <span style="color:var(--accent2)">5 tipos diferentes de ração</span> simultaneamente — e os dados mostram uma diferença significativa de desempenho entre elas. <span style="color:var(--accent)">Aquatec 38</span> apresenta o melhor FCA médio (1,56) e <span style="color:var(--accent)">Guabi 45%</span> o melhor CCMT (+2,1g/sem), enquanto <span style="color:var(--danger)">Potimar Iniciante</span> tem o pior custo-benefício da fazenda: mais cara (R$ 6,20/kg) com o menor crescimento.</p>
+            <p style="margin-bottom:8px">Viveiros que usam <span style="color:var(--accent)">Guabi 45%</span> chegam ao peso de despesca ~10 dias antes dos que usam <span style="color:var(--danger)">Potimar</span>. Para um viveiro de 0,5ha, isso representa economia de R$ 1.400 em custo operacional por ciclo — superior ao custo extra da ração mais cara.</p>
+            <p><strong style="color:var(--text)">Recomendação:</strong> Consolidar para 2 tipos de ração máximo (sugestão: <span style="color:var(--accent2)">Guabi 38%</span> para viveiros em fase inicial e <span style="color:var(--accent2)">Guabi 45%</span> para a fase de engorda a partir de 10g). Isso simplifica o estoque e pode melhorar o FCA médio da fazenda de 1,68 para ~1,60 nos próximos 2 ciclos.</p>
+          </div>
+        </div>
+
+        <!-- RESUMO EXECUTIVO -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px">
+          <div style="font-family:'Syne',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">📋 Resumo Executivo — Ações desta semana</div>
+          ${[
+            {urgencia:'URGENTE',cor:'var(--danger)',bg:'rgba(255,79,79,.1)',acao:'Repor Diflubenzuron e Zeólita — estoque zerado/crítico'},
+            {urgencia:'URGENTE',cor:'var(--danger)',bg:'rgba(255,79,79,.1)',acao:'Iniciar despesca do Viveiro 12 (17,9g, 115 dias, lucro est. R$ 107.988)'},
+            {urgencia:'ESTA SEMANA',cor:'var(--warn)',bg:'rgba(255,179,0,.08)',acao:'Avaliar despesca do Viveiro 05 ao atingir 18g (~7 dias)'},
+            {urgencia:'ESTA SEMANA',cor:'var(--warn)',bg:'rgba(255,179,0,.08)',acao:'Investigar FCA 1,92 do Viveiro 11 — possível mortalidade não registrada'},
+            {urgencia:'ESTA SEMANA',cor:'var(--warn)',bg:'rgba(255,179,0,.08)',acao:'Monitorar sobrevivência do Viveiro 04 (70% com 38 dias)'},
+            {urgencia:'PRÓXIMO CICLO',cor:'var(--accent)',bg:'rgba(0,229,255,.06)',acao:'Considerar substituição de Potimar Iniciante por Guabi 38% ou Aquatec'},
+            {urgencia:'PRÓXIMO CICLO',cor:'var(--accent)',bg:'rgba(0,229,255,.06)',acao:'Planejar despesca do Viveiro 10 em ~14 dias (15,6g, receita est. R$ 122.496)'},
+          ].map(r=>`<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(26,48,80,.3)">
+            <span style="font-size:.58rem;font-weight:700;color:${r.cor};background:${r.bg};border-radius:4px;padding:2px 7px;white-space:nowrap;flex-shrink:0;margin-top:1px">${r.urgencia}</span>
+            <div style="font-size:.72rem;color:var(--muted);line-height:1.45">${r.acao}</div>
+          </div>`).join('')}
+        </div>
+
+        <div style="text-align:center;margin-top:16px;font-size:.62rem;color:var(--muted);font-family:'DM Mono',monospace">AquaShrimpTech IA · dados anonimizados na comparação com plataforma · 24/05/2026 07:00</div>
+      </div>
+    </div>
+  </div>
     <div class="top-bar-est">
       <div class="section-title" style="margin-bottom:0;flex:1">Situação dos Insumos</div>
       <button class="btn-top-est" onclick="abrirModalNovoInsumo()">➕ Novo Item</button>
@@ -1109,6 +1403,147 @@ function executarCriarNovoInsumo(){
 document.querySelectorAll('.modal-overlay').forEach(overlay=>{
   overlay.addEventListener('click', e=>{ if(e.target===overlay) fecharModais(); });
 });
+
+// ════════════════════════════════════════════════════════
+// RELATÓRIO IA — GERA VIA API CLAUDE E ENVIA NO TELEGRAM
+// ════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════
+// RELATÓRIO IA — ANÁLISE PRÉ-GERADA + ENVIO TELEGRAM
+// ════════════════════════════════════════════════════════
+const TG_TOKEN   = "8207381563:AAE_1mnOQQ4swVsqEjXVRcptCeoBF6x_pNc";
+const TG_CHAT_ID = "8202730219";
+
+const RELATORIO_PREGERADO = `🦐 *AQUASHRIMPTECH — RELATÓRIO SEMANAL*
+━━━━━━━━━━━━━━━━━━━━━━━━
+📅 Semana 21/2026 · 24/05/2026 · 12 viveiros
+*Fazenda Modelo Nordeste*
+
+⭐ *NOTA GERAL DA FAZENDA: 7,8/10*
+Acima da média da plataforma (6,8)
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+💰 *VISÃO FINANCEIRA GERAL*
+
+• Biomassa real total: *45.310 kg*
+• Receita estimada (despesca): *R$ 996.820*
+• Custo total dos ciclos: R$ 337.500
+• Lucro estimado total: *R$ 659.320*
+• ROI médio da fazenda: *195,4%*
+• FCA médio: 1,68 | Sobrev. média: 77,5%
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+🏆 *TOP 3 — MAIOR LUCRO ABSOLUTO*
+
+1. Viveiro 12 → lucro est. *R$ 107.988* (ROI 196,7%)
+2. Viveiro 10 → lucro est. *R$ 81.696* (ROI 200,2%)
+3. Viveiro 08 → lucro est. *R$ 67.250* (ROI 223,4%)
+
+🎯 *QUEM FAZ MAIS COM MENOS (ROI)*
+
+1. Viveiro 04 → ROI *311,5%* com apenas R$ 12.800 investido
+2. Viveiro 11 → ROI *297,1%* com R$ 8.200 investido
+3. Viveiro 07 → ROI *225,6%* com R$ 15.600 investido
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+🎣 *DESCER AGORA — JANELA ABERTA*
+
+🔵 *Viveiro 12* — 17,9g | 115 dias
+Receita est.: R$ 162.888 | Lucro: *R$ 107.988*
+Melhor viveiro da fazenda: 10.888 kg/ha e CCMT +2,5g/sem. Cada semana extra de ciclo adiciona custo sem retorno proporcional.
+
+🟢 *Viveiro 05* — 16,8g | 102 dias  
+Receita est.: R$ 100.540 | Lucro: *R$ 55.940*
+Melhor FCA da fazenda (1,55). Aguardar até 18g pode render +R$ 4.500.
+
+*Próximos 30 dias:*
+• V10 (15,6g) → ~14 dias → R$ 122.496
+• V03 (14,2g) → ~26 dias → R$ 96.140
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️ *PONTOS DE ATENÇÃO*
+
+• *V11*: FCA 1,92 com 6,4g após 28 dias. CCMT +1,1g/sem (38% abaixo da média). Verifique mortalidade e revise arraçoamento.
+• *V04*: Sobrevivência de 70% com 38 dias. Monitorar nas próximas 72h.
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+🔴 *ESTOQUE CRÍTICO*
+
+• Diflubenzuron: *ZERADO* → solicitar urgente
+• Zeólita: 40kg → cobertura ~4 dias → *repor imediatamente*
+• Nicoluzzi Premium: 650kg → ~8 dias (V04 e V09 dependem)
+• Cal Virgem: baixo → agendar compra
+• Ácido Ascórbico: baixo → repor junto ao próximo pedido
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+🧪 *ANÁLISE DE LABORATÓRIOS*
+
+Melhor CCMT: Aquatec 38 (+2,30g/sem) e Guabi 45% (+2,10g/sem)
+Melhor FCA: Aquatec 38 (1,56 médio)
+Pior custo-benefício: Potimar Iniciante (R$ 6,20/kg, CCMT +1,4g/sem)
+
+💡 *INSIGHT DA SEMANA*
+Consolidar para 2 rações (Guabi 38% fase inicial + Guabi 45% a partir de 10g) pode reduzir o FCA médio de 1,68 para ~1,60 nos próximos 2 ciclos — economia estimada de R$ 8.400/ciclo em ração.
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+_AquaShrimpTech IA · dados anonimizados · gerado automaticamente_`;
+
+function abrirAnalise() {
+  document.getElementById('modal-analise').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+function fecharAnalise() {
+  document.getElementById('modal-analise').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+async function simularEnvioTelegram() {
+  const btn = document.getElementById('btn-gerar-relatorio');
+  const status = document.getElementById('relatorio-status');
+  btn.disabled = true;
+  btn.textContent = '⏳ Coletando dados dos viveiros...';
+  status.style.display = 'block';
+  status.innerHTML = `<div style="background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.2);border-radius:10px;padding:13px;font-size:.76rem;color:var(--accent);font-family:'DM Mono',monospace;line-height:1.8">
+    <div>🔍 Lendo 12 viveiros...</div>
+    <div>📊 Calculando FCA, CCMT e benchmarks...</div>
+    <div>💰 Analisando rentabilidade e ROI...</div>
+    <div>🤖 Gerando relatório personalizado...</div>
+  </div>`;
+
+  await new Promise(r => setTimeout(r, 2800));
+  btn.textContent = '📤 Enviando no Telegram...';
+
+  try {
+    const resp = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        chat_id: TG_CHAT_ID,
+        text: RELATORIO_PREGERADO,
+        parse_mode: 'Markdown'
+      })
+    });
+    const data = await resp.json();
+    if (data.ok) {
+      btn.textContent = '✅ Enviado no Telegram!';
+      btn.style.background = 'linear-gradient(135deg,var(--accent2),#00b072)';
+      status.innerHTML = `<div style="background:rgba(0,255,163,.08);border:1px solid rgba(0,255,163,.25);border-radius:10px;padding:14px">
+        <div style="font-family:'Syne',sans-serif;font-size:.85rem;font-weight:800;color:var(--accent2);margin-bottom:5px">✅ Relatório enviado com sucesso!</div>
+        <div style="font-size:.72rem;color:var(--muted)">Verifique seu Telegram agora. No plano real, isso acontece automaticamente todo domingo às 07:00 para cada cliente.</div>
+      </div>`;
+    } else { throw new Error(JSON.stringify(data)); }
+  } catch(e) {
+    status.innerHTML = `<div style="background:rgba(255,79,79,.08);border:1px solid rgba(255,79,79,.3);border-radius:10px;padding:13px;font-size:.76rem;color:var(--danger)"><b>Erro ao enviar:</b> ${e.message}</div>`;
+    btn.textContent = '📤 Simular Envio no Telegram';
+    btn.disabled = false;
+    btn.style.background = '';
+  }
+
+  setTimeout(()=>{
+    btn.disabled = false;
+    btn.textContent = '📤 Simular Envio no Telegram';
+    btn.style.background = '';
+  }, 10000);
+}
 
 function renderTudo(){
   renderKpiGeral();
